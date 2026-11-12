@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const DAYS = 30, START = 10000, UNIT_COST = 50;
+  const DAYS = 30, START = 10000;
   const VISIT_MS = 1500, STAGGER_MS = 510, PURCHASE_MS = 840;
   const shoppers = ['👩🏽', '👨🏻', '👩🏼‍🦱', '👨🏾‍🦱', '👩🏻‍🦰', '👨🏼‍🦳'];
   const $ = id => document.getElementById(id);
@@ -9,19 +9,42 @@
   const usd = cents => money.format(cents / 100);
   const cents = id => Math.round($(id).valueAsNumber * 100);
   const tone = value => value < 0 ? 'negative' : value > 0 ? 'positive' : '';
+  const varieties = Array.from($('varieties').querySelectorAll('fieldset'), fieldset => {
+    const [batchInput, priceInput] = fieldset.querySelectorAll('input');
+    return {
+      name: fieldset.querySelector('legend').textContent,
+      unitCost: Number(fieldset.dataset.unitCost),
+      referencePrice: Number(priceInput.defaultValue),
+      batchInput,
+      priceInput
+    };
+  });
   let history = [];
   let cash = START;
   let busy = false;
 
-  function demand(day, price, adSpend, random = Math.random()) {
+  function demand(day, price, adSpend, referencePrice, share, random) {
     const weekend = day % 7 === 6 || day % 7 === 0 ? 1.25 : 1;
     const shoppers = 25 + day * 0.55 + 9 * Math.log1p(adSpend / 300);
-    const priceEffect = Math.exp(-0.47 * (price / 100 - 2));
-    return Math.max(0, Math.round(shoppers * weekend * priceEffect * (0.76 + 0.48 * random)));
+    const priceEffect = Math.exp(-0.47 * (price / 100 - referencePrice));
+    return Math.max(0, Math.round(shoppers * weekend * priceEffect * (0.76 + 0.48 * random) * share));
+  }
+
+  function readPlan() {
+    const batches = varieties.map(variety => ({
+      name: variety.name,
+      batch: variety.batchInput.valueAsNumber,
+      price: Math.round(variety.priceInput.valueAsNumber * 100),
+      referencePrice: variety.referencePrice,
+      bakingCost: variety.batchInput.valueAsNumber * variety.unitCost
+    }));
+    const ads = cents('ads');
+    const expenses = batches.reduce((total, variety) => total + variety.bakingCost, ads);
+    return { batches, ads, expenses };
   }
 
   function updatePlan() {
-    const cost = $('batch').valueAsNumber * UNIT_COST + cents('ads');
+    const { expenses: cost } = readPlan();
     const valid = form.checkValidity();
     const over = valid && cost > cash;
     $('cost').textContent = Number.isFinite(cost) && cost >= 0 ? usd(cost) : '—';
@@ -41,6 +64,7 @@
     $('soldLive').textContent = '0';
     $('empty').hidden = true;
     $('receipt').hidden = true;
+    $('varietySales').hidden = true;
     $('shopFloor').hidden = false;
 
     for (let i = 0; i < count; i++) {
@@ -74,7 +98,18 @@
     $('result-sub').textContent = result
       ? 'Day ' + result.day + ' closed · ' + (result.batch - result.sold) + ' unsold'
       : 'Your sales and costs, counted at closing time.';
-    if (!result) return;
+    $('varietySales').hidden = !result || !result.varietyResults.length;
+    if (!result) {
+      $('varietyRows').replaceChildren();
+      return;
+    }
+    $('varietyRows').replaceChildren(...result.varietyResults.map(variety => {
+      const row = document.createElement('tr');
+      [variety.name, variety.sold + ' / ' + variety.batch, usd(variety.revenue)].forEach(value => {
+        row.insertCell().textContent = value;
+      });
+      return row;
+    }));
     $('sold').textContent = result.sold + ' of ' + result.batch;
     $('revenue').textContent = usd(result.revenue);
     $('expenses').textContent = usd(result.expenses);
@@ -120,12 +155,19 @@
   form.addEventListener('submit', event => {
     event.preventDefault();
     if (busy || history.length >= DAYS || !form.reportValidity()) return;
-    const day = history.length + 1, batch = $('batch').valueAsNumber;
-    const price = cents('price'), ads = cents('ads');
-    const expenses = batch * UNIT_COST + ads;
+    const day = history.length + 1;
+    const { batches, ads, expenses } = readPlan();
     if (expenses > cash) return;
-    const sold = Math.min(batch, demand(day, price, ads));
-    const revenue = sold * price;
+    const batch = batches.reduce((total, variety) => total + variety.batch, 0);
+    const trafficVariation = Math.random();
+    const varietyResults = batches.filter(variety => variety.batch > 0).map(variety => {
+      const share = variety.batch / batch;
+      const interested = demand(day, variety.price, ads, variety.referencePrice, share, trafficVariation);
+      const sold = Math.min(variety.batch, interested);
+      return { name: variety.name, batch: variety.batch, sold, revenue: sold * variety.price };
+    });
+    const sold = varietyResults.reduce((total, variety) => total + variety.sold, 0);
+    const revenue = varietyResults.reduce((total, variety) => total + variety.revenue, 0);
     const profit = revenue - expenses;
     busy = true;
     $('open').textContent = 'Shop is open…';
@@ -135,7 +177,7 @@
     updatePlan();
     animateSales(sold, () => {
       cash += profit;
-      history.push({ day, batch, sold, revenue, expenses, profit, cash });
+      history.push({ day, batch, sold, revenue, expenses, profit, cash, varietyResults });
       busy = false;
       render();
       $('announcement').textContent = 'Day ' + day + ' closed. Sold ' + sold + ' cookies. Profit ' +

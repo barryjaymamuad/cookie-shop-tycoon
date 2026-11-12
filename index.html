@@ -21,6 +21,15 @@
 @keyframes customer-visit{0%{left:-42px;opacity:0}10%{opacity:1}20%{bottom:18%}32%{bottom:15%}44%{bottom:18%}54%,72%{left:calc(72% - 36px);bottom:15%;opacity:1}88%{bottom:18%;opacity:1}100%{left:100%;bottom:15%;opacity:0}}
 @keyframes show-order{0%,53%,77%,100%{opacity:0}57%,73%{opacity:1}}
 @media(prefers-reduced-motion:reduce){.customer,.order{animation:none}}
+.varieties{display:grid;gap:10px}
+.variety{min-width:0;margin:0;padding:8px 12px 11px;border:1px solid var(--line);border-radius:10px}
+.variety legend{padding:0 5px;font-weight:750}
+.variety .hint{margin-bottom:7px}
+.variety-inputs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.variety-inputs .field{display:block}
+.variety-inputs label{font-size:13px;margin-bottom:3px}
+.variety-sales{margin-top:14px}
+.variety-sales th:first-child,.variety-sales td:first-child{white-space:normal}
 </style>
 </head>
 <body>
@@ -42,11 +51,36 @@
 </section>
 <div class="grid">
 <section class="panel" aria-labelledby="plan-title">
-<div class="eyebrow section-label">01 / The kitchen</div><h2 id="plan-title">Plan your day</h2><p class="sub">Set your batch, price, and advertising budget.</p>
+<div class="eyebrow section-label">01 / The kitchen</div><h2 id="plan-title">Plan your day</h2><p class="sub">Set a batch and price for each variety. Bake zero to leave it off the menu.</p>
 <form id="plan">
 <div class="fields">
-<div class="field"><div><label for="batch">Cookies to bake</label><small class="hint" id="batchHint">$0.50 each. Leftovers don’t carry over.</small></div><input type="number" id="batch" min="0" max="10000" step="1" required value="24" aria-describedby="batchHint"></div>
-<div class="field"><div><label for="price">Price per cookie</label><small class="hint" id="priceHint">Higher prices tend to mean fewer buyers.</small></div><div class="money"><span aria-hidden="true">$</span><input type="number" id="price" min="0.01" max="100" step="0.01" required value="2.00" aria-describedby="priceHint"></div></div>
+<div class="varieties" id="varieties">
+<fieldset class="variety" data-unit-cost="50">
+<legend>Chocolate chip</legend>
+<p class="hint">$0.50 to bake each</p>
+<div class="variety-inputs">
+<div class="field"><label for="batch">Cookies to bake</label><input type="number" id="batch" min="0" max="10000" step="1" required value="24"></div>
+<div class="field"><label for="price">Price per cookie</label><div class="money"><span aria-hidden="true">$</span><input type="number" id="price" min="0.01" max="100" step="0.01" required value="2.00"></div></div>
+</div>
+</fieldset>
+<fieldset class="variety" data-unit-cost="75">
+<legend>Double chocolate</legend>
+<p class="hint">$0.75 to bake each</p>
+<div class="variety-inputs">
+<div class="field"><label for="doubleBatch">Cookies to bake</label><input type="number" id="doubleBatch" min="0" max="10000" step="1" required value="0"></div>
+<div class="field"><label for="doublePrice">Price per cookie</label><div class="money"><span aria-hidden="true">$</span><input type="number" id="doublePrice" min="0.01" max="100" step="0.01" required value="2.75"></div></div>
+</div>
+</fieldset>
+<fieldset class="variety" data-unit-cost="100">
+<legend>White chocolate macadamia</legend>
+<p class="hint">$1.00 to bake each</p>
+<div class="variety-inputs">
+<div class="field"><label for="macadamiaBatch">Cookies to bake</label><input type="number" id="macadamiaBatch" min="0" max="10000" step="1" required value="0"></div>
+<div class="field"><label for="macadamiaPrice">Price per cookie</label><div class="money"><span aria-hidden="true">$</span><input type="number" id="macadamiaPrice" min="0.01" max="100" step="0.01" required value="3.50"></div></div>
+</div>
+</fieldset>
+</div>
+<p class="hint">Higher prices tend to mean fewer buyers. Leftovers don’t carry over.</p>
 <div class="field"><div><label for="ads">Advertising spend</label><small class="hint" id="adsHint">Ads bring more shoppers, with diminishing returns.</small></div><div class="money"><span aria-hidden="true">$</span><input type="number" id="ads" min="0" step="0.01" required value="5.00" aria-describedby="adsHint"></div></div>
 </div>
 <div class="cost"><span>Upfront cost</span><strong id="cost">$17.00</strong></div>
@@ -69,6 +103,12 @@
 <div><dt>Profit</dt><dd id="dailyProfit"></dd></div>
 <div><dt>Remaining cash</dt><dd id="remaining"></dd></div>
 </dl>
+<div id="varietySales" class="scroll variety-sales" hidden>
+<table aria-label="Daily sales by variety">
+<thead><tr><th scope="col">Variety</th><th scope="col">Sold / baked</th><th scope="col">Revenue</th></tr></thead>
+<tbody id="varietyRows"></tbody>
+</table>
+</div>
 <p class="sr-only" id="announcement" role="status"></p>
 </section>
 </div>
