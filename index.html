@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Run your own cookie shop in a 30-day browser game.">
+<title>Kevin’s Cookie Shop Tycoon</title>
+<style>
+:root{color-scheme:light;--ink:#382721;--muted:#75645c;--line:#eadcd0;--cream:#fbf6ee;--paper:#fffdf9;--red:#a53828;--green:#28614b}*{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font:15px/1.5 system-ui,sans-serif}button,input{font:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.55}button:focus-visible,input:focus-visible{outline:3px solid #ba5d46;outline-offset:3px}h1,h2,p{margin:0}.wrap{width:min(1080px,calc(100% - 36px));margin:auto}.top{border-bottom:1px solid var(--line);background:var(--paper)}.top .wrap{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:66px}.brand{display:flex;align-items:center;gap:10px;font-weight:800}.mark{display:grid;place-items:center;width:35px;height:35px;border-radius:11px;background:#f5e2ce;font-size:20px}.quiet{border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:9px;padding:7px 12px}.hero{position:relative;isolation:isolate;overflow:hidden;margin:24px 0 16px;border-radius:20px;background:#482a22;color:#fff6e8;min-height:220px;padding:28px 32px;display:flex;align-items:center}.hero-content{z-index:1}.eyebrow{font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase}.hero .eyebrow{color:#f5b490}.hero h1{font:700 clamp(35px,5vw,57px)/.98 Georgia,serif;letter-spacing:-.045em;margin:10px 0 13px}.hero p{color:#f6d8c7}.art{position:absolute;width:42%;height:116%;right:0;top:-8%;pointer-events:none}.stats{display:grid;grid-template-columns:1fr 1fr 1.2fr;gap:12px;margin-bottom:16px}.stat,.panel,.ledger{background:var(--paper);border:1px solid var(--line);border-radius:15px}.stat{padding:12px 17px;min-width:0}.stat .eyebrow,.section-label{color:var(--muted)}.stat strong{display:block;font-size:22px;font-variant-numeric:tabular-nums}.stat:first-child strong{color:var(--green)}progress{display:block;width:100%;height:8px;margin-top:5px;border:0;border-radius:20px;overflow:hidden;background:#f2e6db;accent-color:var(--red)}progress::-webkit-progress-bar{background:#f2e6db}progress::-webkit-progress-value{background:var(--red)}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.panel{padding:20px 22px;min-width:0}.section-label{color:var(--red)}h2{font:700 28px/1.15 Georgia,serif;margin:4px 0 5px;letter-spacing:-.025em}.sub,.hint,.empty,.foot{color:var(--muted);font-size:13px}.fields{display:grid;gap:10px;margin-top:15px}.field{display:grid;grid-template-columns:1fr 105px;align-items:center;gap:8px}.field label{display:block;font-weight:750}.field small{display:block}.field input{width:100%;border:1px solid #ddc9bb;border-radius:8px;background:#fffbf5;padding:7px 9px;color:var(--ink)}.money{position:relative}.money span{position:absolute;left:9px;top:7px;color:var(--muted);pointer-events:none}.money input{padding-left:23px}.cost{border-top:1px solid var(--line);display:flex;justify-content:space-between;margin-top:15px;padding-top:10px;font-size:13px;gap:12px}.primary{width:100%;border:0;border-radius:9px;padding:10px 14px;background:var(--red);color:white;font-weight:750;margin-top:10px}.primary:hover:enabled{background:#862b20}.error{color:var(--red);font-size:13px;margin-top:6px}.empty{display:grid;place-content:center;text-align:center;min-height:205px;margin-top:15px;padding:18px;border:1px dashed #e6d3c3;border-radius:12px;background:#fdf8f1}.empty b{display:block;color:var(--ink);font-size:16px;margin:6px 0 2px}.empty span{font-size:28px}.receipt{margin-top:10px}.receipt div{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid var(--line)}.receipt dt,.receipt dd{margin:0}.receipt dd{font-weight:750;font-variant-numeric:tabular-nums}.receipt div:last-child{border-bottom:0;background:#f3ede4;border-radius:8px;padding-inline:10px;margin-top:6px}.positive{color:var(--green)}.negative{color:var(--red)}.ledger{margin:16px 0 0;padding:15px 22px}.ledger summary{cursor:pointer;font-weight:750}.ledger .sub{margin-top:10px}.scroll{overflow:auto}table{width:100%;border-collapse:collapse;white-space:nowrap;margin-top:8px;font-size:13px}th,td{text-align:right;padding:8px;border-bottom:1px solid var(--line)}th:first-child,td:first-child{text-align:left}.foot{text-align:center;padding:16px}.finish{padding:12px;background:#e8f0e7;border-radius:10px;margin-top:12px}.finish p{margin-top:3px}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}[hidden]{display:none!important}@media(max-width:690px){.grid{grid-template-columns:1fr}.hero{padding:23px 20px;min-height:194px}.art{width:52%;right:-13%;opacity:.38}.stat{padding:9px 10px}.stat strong{font-size:17px}.stat .eyebrow{font-size:9px}.panel{padding:17px}.top .wrap{min-height:58px}}@media(prefers-reduced-motion:no-preference){.primary,.quiet{transition:background .15s}}
+.shop-floor{margin-top:15px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fdf8f1}
+.shop-scene{position:relative;height:155px;isolation:isolate;overflow:hidden;background:linear-gradient(#f7e3cd 0 73%,#ecd4b9 73%);border-bottom:1px solid var(--line)}
+.shop-door{position:absolute;left:7%;bottom:27%;width:39px;height:70px;background:#f9eddb;border:4px solid #a97455;border-bottom:0;border-radius:19px 19px 0 0}
+.shop-door::after{content:"";position:absolute;right:4px;top:37px;width:4px;height:4px;border-radius:50%;background:#a97455}
+.shop-counter{position:absolute;left:72%;bottom:23%;width:25%;height:53px;display:grid;align-content:end;justify-items:center;padding-bottom:6px;color:#fff6e8;background:#8b4936;border-radius:5px 5px 9px 9px;font-size:9px;font-weight:800;letter-spacing:.08em}
+.shop-counter::before{content:"🍪";position:absolute;top:-29px;width:100%;text-align:center;font-size:21px}
+.shop-counter::after{content:"";position:absolute;inset:0 0 auto;height:9px;border-radius:5px;background:#b97050}
+.shop-status{padding:8px 12px;color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums}
+.shop-status strong{color:var(--green)}
+.customer{position:absolute;left:-42px;bottom:15%;width:38px;text-align:center;line-height:1;font-size:29px;opacity:0;animation:customer-visit 1500ms linear both;animation-delay:var(--delay)}
+.order{position:absolute;left:50%;bottom:100%;transform:translateX(-50%);border:1px solid #e4c5a3;border-radius:20px;padding:4px 7px;background:#fffaf1;color:var(--ink);white-space:nowrap;font:750 11px/1 system-ui,sans-serif;animation:show-order 1500ms linear both;animation-delay:var(--delay)}
+@keyframes customer-visit{0%{left:-42px;opacity:0}10%{opacity:1}20%{bottom:18%}32%{bottom:15%}44%{bottom:18%}54%,72%{left:calc(72% - 36px);bottom:15%;opacity:1}88%{bottom:18%;opacity:1}100%{left:100%;bottom:15%;opacity:0}}
+@keyframes show-order{0%,53%,77%,100%{opacity:0}57%,73%{opacity:1}}
+@media(prefers-reduced-motion:reduce){.customer,.order{animation:none}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap"><div class="brand"><span class="mark" aria-hidden="true">🍪</span> Kevin’s Cookie Shop</div><button class="quiet" id="reset" type="button" disabled>New game</button></div></header>
+<main class="wrap">
+<section class="hero" aria-labelledby="title">
+<div class="hero-content"><div class="eyebrow">The 30-day bakery challenge</div><h1 id="title">Kevin’s Cookie<br>Shop Tycoon</h1><p>Start with $100. See how much you can earn in 30 days.</p></div>
+<svg class="art" viewBox="0 0 420 250" aria-hidden="true">
+<defs><pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M30 0H0V30" fill="none" stroke="#ffd0ac" stroke-opacity=".16"/></pattern><g id="cookie"><circle r="66" fill="#ad5a32"/><circle cy="-5" r="64" fill="#eda660"/><circle cy="-5" r="56" fill="none" stroke="#ffd08b" stroke-width="2" stroke-dasharray="2 5"/><path fill="#633522" d="M-35-31q10-7 15 4t-9 13q-14-2-6-17M17-38q14-5 17 6t-10 12q-10-3-7-18M-6-10q13-4 13 8T-7 9q-11-3 1-19M-40 13q10-8 16 2t-5 14q-13 2-11-16M25 9q12-4 15 6t-10 14q-12-2-5-20M-8 30q10-5 15 4t-4 14q-14 1-11-18"/><g fill="#c8783d"><circle cx="-12" cy="-38" r="2"/><circle cx="5" cy="-28" r="3"/><circle cx="41" cy="-7" r="3"/><circle cx="-50" cy="-7" r="2"/><circle cx="-15" cy="17" r="2"/><circle cx="18" cy="36" r="2"/></g></g></defs>
+<path d="M105 0h315v250H48z" fill="url(#grid)"/><ellipse cx="257" cy="217" rx="125" ry="14" fill="#2b1813" opacity=".55"/>
+<use href="#cookie" transform="translate(279 142) rotate(31) scale(1.03)"/><use href="#cookie" transform="translate(183 151) rotate(-22) scale(.76)"/><use href="#cookie" transform="translate(228 87) rotate(12) scale(.9)"/>
+<path d="M333 41v24m-12-12h24M129 63v16m-8-8h16M371 157v14m-7-7h14" stroke="#ffd49a" stroke-width="2" stroke-linecap="round"/><g fill="#f1ab69"><circle cx="108" cy="172" r="4"/><circle cx="352" cy="106" r="4"/><circle cx="349" cy="201" r="5"/><circle cx="367" cy="210" r="2"/><circle cx="148" cy="206" r="3"/></g>
+</svg>
+</section>
+<section class="stats" aria-label="Shop status">
+<div class="stat"><div class="eyebrow">Cash on hand</div><strong id="cash">$100.00</strong></div>
+<div class="stat"><div class="eyebrow">Total profit</div><strong id="profit">$0.00</strong></div>
+<div class="stat"><div class="eyebrow" id="dayLabel">Shop calendar</div><strong id="day">Day 1 of 30</strong><progress id="progress" max="30" value="0" aria-label="Days completed"></progress></div>
+</section>
+<div class="grid">
+<section class="panel" aria-labelledby="plan-title">
+<div class="eyebrow section-label">01 / The kitchen</div><h2 id="plan-title">Plan your day</h2><p class="sub">Set your batch, price, and advertising budget.</p>
+<form id="plan">
+<div class="fields">
+<div class="field"><div><label for="batch">Cookies to bake</label><small class="hint" id="batchHint">$0.50 each. Leftovers don’t carry over.</small></div><input type="number" id="batch" min="0" max="10000" step="1" required value="24" aria-describedby="batchHint"></div>
+<div class="field"><div><label for="price">Price per cookie</label><small class="hint" id="priceHint">Higher prices tend to mean fewer buyers.</small></div><div class="money"><span aria-hidden="true">$</span><input type="number" id="price" min="0.01" max="100" step="0.01" required value="2.00" aria-describedby="priceHint"></div></div>
+<div class="field"><div><label for="ads">Advertising spend</label><small class="hint" id="adsHint">Ads bring more shoppers, with diminishing returns.</small></div><div class="money"><span aria-hidden="true">$</span><input type="number" id="ads" min="0" step="0.01" required value="5.00" aria-describedby="adsHint"></div></div>
+</div>
+<div class="cost"><span>Upfront cost</span><strong id="cost">$17.00</strong></div>
+<p class="error" id="error" role="status" hidden></p>
+<button class="primary" id="open" type="submit">Open shop for Day 1 →</button>
+</form>
+<div class="finish" id="finish" hidden><strong>That’s a wrap!</strong><p id="outcome"></p></div>
+</section>
+<section class="panel" aria-labelledby="result-title">
+<div class="eyebrow section-label">02 / The register</div><h2 id="result-title">Daily results</h2><p class="sub" id="result-sub">Your sales and costs, counted at closing time.</p>
+<div id="empty" class="empty"><div><span aria-hidden="true">🧾</span><b>No sales yet</b>Open the shop to see your first daily receipt.</div></div>
+<div id="shopFloor" class="shop-floor" hidden>
+<div class="shop-scene" aria-hidden="true"><div class="shop-door"></div><div class="shop-counter">PICKUP</div><div id="customers"></div></div>
+<p class="shop-status" aria-hidden="true"><strong id="soldLive">0</strong> cookies sold so far</p>
+</div>
+<dl id="receipt" class="receipt" hidden>
+<div><dt>Cookies sold</dt><dd id="sold"></dd></div>
+<div><dt>Revenue</dt><dd id="revenue"></dd></div>
+<div><dt>Expenses</dt><dd id="expenses"></dd></div>
+<div><dt>Profit</dt><dd id="dailyProfit"></dd></div>
+<div><dt>Remaining cash</dt><dd id="remaining"></dd></div>
+</dl>
+<p class="sr-only" id="announcement" role="status"></p>
+</section>
+</div>
+<details class="ledger"><summary>Sales history <span class="sub" id="count">· 0 days</span></summary>
+<p class="sub" id="noHistory">Completed days will appear here.</p>
+<div class="scroll" id="history" hidden><table aria-label="Sales history"><thead><tr><th scope="col">Day</th><th scope="col">Sold / baked</th><th scope="col">Revenue</th><th scope="col">Expenses</th><th scope="col">Profit</th><th scope="col">Cash</th></tr></thead><tbody id="rows"></tbody></table></div></details>
+<footer class="foot">One batch at a time. 🍪</footer>
+</main>
+<script src="game.js" defer></script>
+</body>
+</html>
