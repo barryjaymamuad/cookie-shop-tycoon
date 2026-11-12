@@ -30,6 +30,7 @@
 .variety-inputs label{font-size:13px;margin-bottom:3px}
 .variety-sales{margin-top:14px}
 .variety-sales th:first-child,.variety-sales td:first-child{white-space:normal}
+.stats{grid-template-columns:repeat(4,minmax(0,1fr))}.satisfaction-report{margin-top:14px;padding:12px;border:1px solid var(--line);border-radius:10px}.satisfaction-report p{margin-top:5px}.history-reason{white-space:normal;min-width:260px;text-align:left}@media(max-width:690px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
 </head>
 <body>
@@ -47,6 +48,7 @@
 <section class="stats" aria-label="Shop status">
 <div class="stat"><div class="eyebrow">Cash on hand</div><strong id="cash">$100.00</strong></div>
 <div class="stat"><div class="eyebrow">Total profit</div><strong id="profit">$0.00</strong></div>
+<div class="stat"><div class="eyebrow">Customer satisfaction</div><strong id="satisfaction">75/100</strong></div>
 <div class="stat"><div class="eyebrow" id="dayLabel">Shop calendar</div><strong id="day">Day 1 of 30</strong><progress id="progress" max="30" value="0" aria-label="Days completed"></progress></div>
 </section>
 <div class="grid">
@@ -80,7 +82,7 @@
 </div>
 </fieldset>
 </div>
-<p class="hint">Higher prices tend to mean fewer buyers. Leftovers don’t carry over.</p>
+<p class="hint">Higher prices tend to mean fewer buyers. Fair prices and enough stock improve satisfaction; high prices and shortages lower it. Leftovers don’t carry over.</p>
 <div class="field"><div><label for="ads">Advertising spend</label><small class="hint" id="adsHint">Ads bring more shoppers, with diminishing returns.</small></div><div class="money"><span aria-hidden="true">$</span><input type="number" id="ads" min="0" step="0.01" required value="5.00" aria-describedby="adsHint"></div></div>
 </div>
 <div class="cost"><span>Upfront cost</span><strong id="cost">$17.00</strong></div>
@@ -103,6 +105,10 @@
 <div><dt>Profit</dt><dd id="dailyProfit"></dd></div>
 <div><dt>Remaining cash</dt><dd id="remaining"></dd></div>
 </dl>
+<section id="satisfactionReport" class="satisfaction-report" aria-labelledby="satisfaction-title" hidden>
+<strong id="satisfaction-title">Customer satisfaction</strong>
+<p id="satisfactionChange"></p><p class="sub" id="satisfactionReason"></p>
+</section>
 <div id="varietySales" class="scroll variety-sales" hidden>
 <table aria-label="Daily sales by variety">
 <thead><tr><th scope="col">Variety</th><th scope="col">Sold / baked</th><th scope="col">Revenue</th></tr></thead>
@@ -114,7 +120,7 @@
 </div>
 <details class="ledger"><summary>Sales history <span class="sub" id="count">· 0 days</span></summary>
 <p class="sub" id="noHistory">Completed days will appear here.</p>
-<div class="scroll" id="history" hidden><table aria-label="Sales history"><thead><tr><th scope="col">Day</th><th scope="col">Sold / baked</th><th scope="col">Revenue</th><th scope="col">Expenses</th><th scope="col">Profit</th><th scope="col">Cash</th></tr></thead><tbody id="rows"></tbody></table></div></details>
+<div class="scroll" id="history" hidden><table aria-label="Sales history"><thead><tr><th scope="col">Day</th><th scope="col">Sold / baked</th><th scope="col">Revenue</th><th scope="col">Expenses</th><th scope="col">Profit</th><th scope="col">Cash</th><th scope="col">Satisfaction</th><th scope="col">Why it changed</th></tr></thead><tbody id="rows"></tbody></table></div></details>
 <footer class="foot">One batch at a time. 🍪</footer>
 </main>
 <script src="game.js" defer></script>
